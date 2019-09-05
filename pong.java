@@ -39,18 +39,18 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 	 */
 	
 	
-	int x = 100;
-	int y = 100;
-	int y_r = 100;
+	int x = table_width/2;
+	int y = table_height/2;
+	int y_b = table_height /2;
 	int x_r = 100;
+	int y2_b = table_height / 2;
+	int x2_r = table_width - 100;
 	
 	int bxmin = x_r -5;
 	int bxmax = x_r +5;
-	int bymax = 25 + y_r;
-	int bymin = y_r - 25;
+	int bymax = 25 + y_b;
+	int bymin = y_b - 25;
 	
-	//int min = 0;
-	//int max = 2*radius;
 	
 	double xvelocity = -3;
 	double yvelocity = 5;
@@ -64,19 +64,20 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 		g.setColor(new Color(0, 0 , 0 ));
 		g.fillRect(0, 0, table_width, table_height);
 		g.setColor(Color.WHITE);
-		g.fillRect(y_r, x_r, 10, 50);
+		g.fillRect(x_r, y_b, 10, 50);
 		g.fillOval(x, y, radius, radius);
+		g.fillRect(x2_r, y2_b , 10, 50);
 		
-		//g.setColor(Color.RED);
-		//g.fillRect(y_r, x_r, 10+x_r, 50 + y_r);
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		x += xvelocity;
 		y += yvelocity;
-		x_r += bxvelocity;
-		y_r += byvelocity;
+		//x_r += bxvelocity;
+		y_b += byvelocity;
+		y2_b += b2yvelocity
 		if(y >= table_height-radius || y <= 0 - radius){
 			if(yvelocity < 0)
 				yvelocity = -yvelocity;
@@ -87,7 +88,15 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 				x = table_width/2;
 				y = table_height/2;
 		
-		}else if(x <= bxmax && bymax >= y && y >= bymin){
+		}
+		
+		
+		bxmin = x_r -5;
+		bxmax = x_r +5;
+		bymax = 25 + y_b;
+		bymin = y_b - 25;
+
+		if(x <= bxmax && y <= bymax && y >= bymin){
 			//if(xvelocity < 0){
 			//xvelocity = -xvelocity;
 			//}
@@ -132,17 +141,19 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 		System.out.println(e.getKeyCode());
 		int key = e.getKeyCode();
 		switch (key){
-		case 39:
-			bxvelocity = 10;
-			break;
-		case 37:
-			bxvelocity = -10;
-			break;
 		case 40:
-			//y_r += 10;
+			if (y_b < table_height)
+				byvelocity = 10;
 			break;
 		case 38:
-			//y_r -= 10;
+			if (y_b > 0)
+				byvelocity = -10;
+			break;
+		case 39:
+			//y_b += 10;
+			break;
+		case 37:
+			//y_b -= 10;
 		}
 	}
 
@@ -151,11 +162,11 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		int key = e.getKeyCode();
 		switch (key){
-		case 39:
-			bxvelocity = 0;
+		case 40:
+			byvelocity = 0;
 			break;
-		case 37:
-			bxvelocity = 0;
+		case 38:
+			byvelocity = 0;
 			break;
 		}
 		
