@@ -51,12 +51,19 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 	int bymax = 25 + y_b;
 	int bymin = y_b - 25;
 	
+	int bx2min = x2_r -5;
+	int bx2max = x2_r +5;
+	int by2max = 25 + y2_b;
+	int by2min = y2_b - 25;
+	
 	
 	double xvelocity = -3;
 	double yvelocity = 5;
 	int gravity = 10;
 	double bxvelocity;
 	double byvelocity;
+	double bx2velocity;
+	double by2velocity;
 	
 	public void paint(Graphics g) {
 		
@@ -77,31 +84,52 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 		y += yvelocity;
 		//x_r += bxvelocity;
 		y_b += byvelocity;
-		y2_b += b2yvelocity
+		y2_b += by2velocity;
 		if(y >= table_height-radius || y <= 0 - radius){
 			if(yvelocity < 0)
 				yvelocity = -yvelocity;
 			else
 				yvelocity = -yvelocity;
 		}else if(x >= table_width - radius || x<=0 - radius ){
-				xvelocity = -xvelocity;
+				xvelocity = -3;
+				yvelocity = 5;
 				x = table_width/2;
 				y = table_height/2;
 		
 		}
-		
+		bx2min = x2_r -5;
+		bx2max = x2_r +5;
+		by2max = 25 + y2_b;
+		by2min = y2_b - 25;
 		
 		bxmin = x_r -5;
 		bxmax = x_r +5;
 		bymax = 25 + y_b;
 		bymin = y_b - 25;
+		
+		int max = x + radius;
+		int min = x - radius;
+		int max2 = y + radius;
+		int min2 = y - radius;
 
 		if(x <= bxmax && y <= bymax && y >= bymin){
 			//if(xvelocity < 0){
 			//xvelocity = -xvelocity;
 			//}
 			//else
-				xvelocity = -xvelocity;
+				xvelocity = -xvelocity + (Math.abs(byvelocity*0.8));
+				yvelocity += byvelocity*0.4;
+				System.out.println("x" + x + "y" + y);
+		}
+	
+		
+		if(x >= bx2min && x <= bx2max && y <= by2max && y >= by2min){
+			//if(xvelocity < 0){
+			//xvelocity = -xvelocity;
+			//}
+			//else
+				xvelocity = -xvelocity + (Math.abs(by2velocity*0.8));
+				yvelocity += by2velocity*0.4;
 				System.out.println("x" + x + "y" + y);
 		}
 		
@@ -149,11 +177,11 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 			if (y_b > 0)
 				byvelocity = -10;
 			break;
-		case 39:
-			//y_b += 10;
+		case 87:
+			by2velocity = 10;
 			break;
-		case 37:
-			//y_b -= 10;
+		case 83:
+			by2velocity = -10;
 		}
 	}
 
@@ -168,6 +196,11 @@ public class Driver extends JPanel implements ActionListener, KeyListener {
 		case 38:
 			byvelocity = 0;
 			break;
+		case 87:
+			by2velocity = 0;
+			break;
+		case 83:
+			by2velocity = 0;
 		}
 		
 	}
