@@ -1,0 +1,162 @@
+// The AWT Graphics Program
+// This is the student, starting version of Graphics Lab 01.
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.applet.*;
+
+
+public class Lab2 extends Applet implements ActionListener, KeyListener, MouseListener
+{
+	/*
+	 * Goals:
+	 * create applet that allows you to place lines and create ellipses based on what key is pressed
+	 * controls:
+	 * l is line origninating at place selected
+	 * r is for rectangle
+	 * c is for circle
+	 * 
+	 */
+	
+	int posx1 [];
+	int posy1 [];
+	int posx2 [];
+	int posy2 [];
+	int table_width;
+	int table_height;
+	String s = "";
+	
+    
+
+	public void init(){
+		table_width = getSize().width;
+		table_height = getSize().height;
+		
+		addKeyListener( this );
+		addMouseListener( this );
+	}
+	
+	
+	public void paint(Graphics g)
+    {
+    	this.setSize(800,600);
+    	
+    	
+    	g.setColor(Color.GREEN);
+    	g.drawString(s, x + 30, y + 20);
+    	
+        // DRAW CUBE
+
+    	
+    	
+
+        // DRAW SPHERE
+
+
+
+
+        // DRAW INSCRIBED/CIRCUMSCRIBED TRIANGLE
+
+
+
+
+        // DRAW APCS
+    	 
+
+
+
+        // DRAW PACMEN FLOWER
+    	
+
+
+
+    }
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		int key = arg0.getKeyCode();
+		switch(key){
+		case 78:
+			paintLine(x, y, x2, y2);
+		}
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		repaint();
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	    int key = e.getKeyCode();
+	    System.out.println(key);
+	    switch(key){
+	    case(40):
+	    	x += 100;
+	    	repaint();
+	    	break;
+	    case(37):
+	    	y += 100;
+	    	repaint();
+	    	break;
+	    }
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		System.out.println(key);
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		if(arg0.getButton() == MouseEvent.BUTTON1){
+			x = arg0.getX();
+			y = arg0.getY();
+		}
+		if(arg0.getButton() == MouseEvent.BUTTON3){
+			x2 = arg0.getX();
+			y2 = arg0.getY();
+		}
+		
+		
+		s = "x: " + x + "y" + y;
+		repaint();
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
