@@ -8,6 +8,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.applet.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class Lab2 extends Applet implements ActionListener, KeyListener, MouseListener
@@ -22,14 +25,25 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 	 * 
 	 */
 	
-	int posx1 [];
+	/*int posx1 [];
 	int posy1 [];
 	int posx2 [];
 	int posy2 [];
 	int table_width;
 	int table_height;
-	String s = "";
+	*/
 	
+	
+	int x;
+	int y;
+	int x2;
+	int y2;
+	
+	int c1;
+	int c2;
+	String s = "";
+	int table_width;
+	int table_height;
     
 
 	public void init(){
@@ -44,33 +58,69 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 	public void paint(Graphics g)
     {
     	this.setSize(800,600);
+    	x = table_width / 4 + 50;
+    	y = table_height / 4 + 50;
     	
     	
+    	try {
+			URL fontUrl = new URL("file:///C:/Users/1844478/workspace/Methods Lab 2019/src/FFFFORWA.TTF");
+			Font font = Font.createFont(Font.TRUETYPE_FONT, fontUrl.openStream());
+	        font = font.deriveFont(Font.PLAIN,40);
+	        GraphicsEnvironment ge =
+	            GraphicsEnvironment.getLocalGraphicsEnvironment();
+	        ge.registerFont(font);
+	        g.setFont(font);
+	        g.drawString("APCS", table_width + 50 , table_height + 100 );
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	g.setColor(Color.GREEN);
+    	
     	g.drawString(s, x + 30, y + 20);
     	
-        // DRAW CUBE
-
+         //DRAW CUBE
+    	g.drawLine(x, y, x + 100, y - 50);
+    	g.drawLine(x + 100, y -50, x + 100, y + 100);
+    	g.drawLine(x + 100, y -50 , x + 250, y - 50);
+    	g.drawLine(x, y, x + 100, y);
+    	g.drawLine(x + 250, y -50 , x + 250, y + 100);
+    	g.drawLine(x + 100 , y + 100 , x + 250, y + 100);
+    	g.drawLine(x, y, x, y + 100);
+    	g.drawLine(x, y + 100, x + 100, y + 100);
+    	g.drawLine(x + 100, y , x + 250, y -50);
     	
+    	
+    	
+    	//draw plane
     	
 
         // DRAW SPHERE
-
+    	
 
 
 
         // DRAW INSCRIBED/CIRCUMSCRIBED TRIANGLE
-
+    	radius
+    	g.drawOval(350 , 350 , 200, 200);
+    	
 
 
 
         // DRAW APCS
+    	
     	 
 
 
 
         // DRAW PACMEN FLOWER
-    	
+
 
 
 
@@ -81,7 +131,7 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 		int key = arg0.getKeyCode();
 		switch(key){
 		case 78:
-			paintLine(x, y, x2, y2);
+			//paintLine(x, y, x2, y2);
 		}
 		
 	}
@@ -125,8 +175,8 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 			y = arg0.getY();
 		}
 		if(arg0.getButton() == MouseEvent.BUTTON3){
-			x2 = arg0.getX();
-			y2 = arg0.getY();
+			//x2 = arg0.getX();
+			//y2 = arg0.getY();
 		}
 		
 		
