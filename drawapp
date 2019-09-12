@@ -1,5 +1,3 @@
-// The AWT Graphics Program
-// This is the student, starting version of Graphics Lab 01.
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,37 +13,18 @@ import java.net.URL;
 
 public class Lab2 extends Applet implements ActionListener, KeyListener, MouseListener
 {
-	/*
-	 * Goals:
-	 * create applet that allows you to place lines and create ellipses based on what key is pressed
-	 * controls:
-	 * l is line origninating at place selected
-	 * r is for rectangle
-	 * c is for circle
-	 * 
-	 */
-	
-	/*int posx1 [];
-	int posy1 [];
-	int posx2 [];
-	int posy2 [];
-	int table_width;
-	int table_height;
-	*/
-	
+
+	//Initializing variables
 	
 	int x;
 	int y;
-	int x2;
-	int y2;
-	
-	int c1;
-	int c2;
+	int posx;
+	int posy;
 	String s = "";
 	int table_width;
 	int table_height;
     
-
+//init function
 	public void init(){
 		table_width = getSize().width;
 		table_height = getSize().height;
@@ -54,23 +33,25 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 		addMouseListener( this );
 	}
 	
-	
+	//painting function
 	public void paint(Graphics g)
     {
     	this.setSize(800,600);
     	x = table_width / 4 + 50;
     	y = table_height / 4 + 50;
     	
-    	
+        // DRAW APCS
+    	//opening custom font
     	try {
-			URL fontUrl = new URL("file:///C:/Users/1844478/workspace/Methods Lab 2019/src/FFFFORWA.TTF");
+			String dir = System.getProperty("user.dir");
+    		URL fontUrl = new URL("file:///" + dir + "/FFFFORWA.TTF");
 			Font font = Font.createFont(Font.TRUETYPE_FONT, fontUrl.openStream());
 	        font = font.deriveFont(Font.PLAIN,40);
 	        GraphicsEnvironment ge =
 	            GraphicsEnvironment.getLocalGraphicsEnvironment();
 	        ge.registerFont(font);
 	        g.setFont(font);
-	        g.drawString("APCS", table_width + 50 , table_height + 100 );
+	        g.drawString("APCS", 500 , 600 );
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,58 +64,113 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 		}
     	g.setColor(Color.GREEN);
     	
-    	g.drawString(s, x + 30, y + 20);
+    	g.drawString(s, 80, 500);
+    	g.setColor(Color.BLACK);
+    	//draw plane 1
+    	posx = table_width/4;
+    	posy = table_height/4;
+    	g.drawLine(posx, posy, posx, posy + 200);
+    	g.drawLine(posx, posy, posx + 200, posy);
+    	g.drawLine(posx + 200, posy, posx + 200, posy + 200);
+    	g.drawLine(posx, posy+ 200, posx + 200 , posy + 200);
     	
-         //DRAW CUBE
-    	g.drawLine(x, y, x + 100, y - 50);
-    	g.drawLine(x + 100, y -50, x + 100, y + 100);
-    	g.drawLine(x + 100, y -50 , x + 250, y - 50);
-    	g.drawLine(x, y, x + 100, y);
-    	g.drawLine(x + 250, y -50 , x + 250, y + 100);
-    	g.drawLine(x + 100 , y + 100 , x + 250, y + 100);
-    	g.drawLine(x, y, x, y + 100);
-    	g.drawLine(x, y + 100, x + 100, y + 100);
-    	g.drawLine(x + 100, y , x + 250, y -50);
+    	//DRAW PLANE 2
+    	posx = table_width/4 + 100;
+    	posy = table_height/4 + 100;
+    	g.drawLine(posx, posy, posx, posy + 200);
+    	g.drawLine(posx, posy, posx + 200, posy);
+    	g.drawLine(posx + 200, posy, posx + 200, posy + 200);
+    	g.drawLine(posx, posy+ 200, posx + 200 , posy + 200);
     	
-    	
-    	
-    	//draw plane
-    	
-
+    	//CONNECT PLANES
+    	posx = table_width/4 + 100;
+    	posy = table_height/4 + 100;
+    	g.drawLine(posx - 100, posy - 100, posx, posy);
+    	g.drawLine(posx + 100, posy - 100, posx + 200, posy);
+    	g.drawLine(posx - 100, posy + 100, posx , posy + 200);
+    	g.drawLine(posx + 100, posy + 100, posx + 200, posy + 200);
         // DRAW SPHERE
+    	posx = table_width/4 +50;
+    	posy = table_height/4 +50;
+    	g.drawOval(posx, posy, 200, 200);
     	
-
-
-
+    	//increment x ovals
+    	g.drawOval(posx + 10/2, posy, 200 - 10 , 200);
+    	g.drawOval(posx + 20/2, posy, 200 - 20 , 200);
+    	g.drawOval(posx + 30/2, posy, 200 - 30 , 200);
+    	g.drawOval(posx + 40/2, posy, 200 - 40 , 200);
+    	g.drawOval(posx + 50/2, posy, 200 - 50 , 200);
+    	g.drawOval(posx + 60/2, posy, 200 - 60 , 200);
+    	g.drawOval(posx + 70/2, posy, 200 - 70 , 200);
+    	g.drawOval(posx + 80/2, posy, 200 - 80 , 200);
+    	g.drawOval(posx + 90/2, posy, 200 - 90 , 200);
+    	g.drawOval(posx + 100/2, posy, 200 - 100 , 200);
+    	g.drawOval(posx + 110/2, posy, 200 - 110 , 200);
+    	g.drawOval(posx + 120/2, posy, 200 - 120 , 200);
+    	g.drawOval(posx + 130/2, posy, 200 - 130 , 200);
+    	g.drawOval(posx + 140/2, posy, 200 - 140 , 200);
+    	g.drawOval(posx + 150/2, posy, 200 - 150 , 200);
+    	g.drawOval(posx + 160/2, posy, 200 - 160 , 200);
+    	g.drawOval(posx + 170/2, posy, 200 - 170 , 200);
+    	g.drawOval(posx + 180/2, posy, 200 - 180 , 200);
+    	g.drawOval(posx + 190/2, posy, 200 - 190 , 200);
+    	g.drawOval(posx + 100, posy, 0 , 200);
+    	
+    	// increment y ovals
+    	g.drawOval(posx, posy + 10/2, 200, 200 - 10);
+    	g.drawOval(posx, posy + 20/2, 200, 200 - 20 );
+    	g.drawOval(posx, posy + 30/2, 200, 200 - 30  );
+    	g.drawOval(posx, posy + 40/2, 200, 200 - 40  );
+    	g.drawOval(posx, posy + 50/2, 200, 200 - 50  );
+    	g.drawOval(posx, posy + 60/2, 200, 200 - 60  );
+    	g.drawOval(posx, posy + 70/2, 200, 200 - 70 );
+    	g.drawOval(posx, posy + 80/2, 200, 200 - 80  );
+    	g.drawOval(posx, posy + 90/2, 200, 200 - 90  );
+    	g.drawOval(posx, posy + 100/2, 200, 200 - 100  );
+    	g.drawOval(posx, posy + 110/2, 200, 200 - 110  );
+    	g.drawOval(posx, posy + 120/2, 200, 200 - 120  );
+    	g.drawOval(posx, posy + 130/2, 200, 200 - 130  );
+    	g.drawOval(posx, posy + 140/2, 200, 200 - 140  );
+    	g.drawOval(posx, posy + 150/2, 200, 200 - 150  );
+    	g.drawOval(posx, posy + 160/2, 200, 200 - 160  );
+    	g.drawOval(posx, posy + 170/2, 200, 200 - 170  );
+    	g.drawOval(posx, posy + 180/2, 200, 200 - 180  );
+    	g.drawOval(posx, posy + 190/2, 200, 200 - 190  );
+    	g.drawOval(posx, posy + 100, 200, 0);
         // DRAW INSCRIBED/CIRCUMSCRIBED TRIANGLE
-    	radius
+    	int pos1 = 350;
+    	int pos2 = 350;
+    	
     	g.drawOval(350 , 350 , 200, 200);
+    	g.drawLine(pos1 + 100, pos2, pos1 + 100, pos2 + 200);
+    	g.drawLine(pos1 + 100, pos2 + 200, pos1 + 200, pos2 + 100);
+    	g.drawLine(pos1 + 100, pos2 , pos1 + 200, pos2 + 100);
+    	g.drawOval(pos1 + 100, pos2 + 59, 83, 83);
+
+
+    
+    	 // DRAW PACMEN FLOWER
+    	posx = 500;
+    	posy = 120;
     	
-
-
-
-        // DRAW APCS
+    	g.fillOval(posx, posy, 100, 100);
+    	g.fillOval(posx+75, posy, 100, 100);
+    	g.fillOval(posx, posy + 75, 100, 100);
+    	g.fillOval(posx + 75, posy + 75, 100, 100);
     	
-    	 
-
-
-
-        // DRAW PACMEN FLOWER
-
-
-
-
+    	g.setColor(Color.WHITE);
+    	g.fillRect(posx, posy, 50, 50);
+    	g.fillRect(posx + 125, posy, 50, 50);
+    	g.fillRect(posx, posy + 125, 50, 50);
+    	g.fillRect(posx + 125, posy + 125, 50, 50);
+    
     }
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		int key = arg0.getKeyCode();
-		switch(key){
-		case 78:
-			//paintLine(x, y, x2, y2);
+	
 		}
 		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -145,41 +181,22 @@ public class Lab2 extends Applet implements ActionListener, KeyListener, MouseLi
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-	    int key = e.getKeyCode();
-	    System.out.println(key);
-	    switch(key){
-	    case(40):
-	    	x += 100;
-	    	repaint();
-	    	break;
-	    case(37):
-	    	y += 100;
-	    	repaint();
-	    	break;
-	    }
+	    
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-		System.out.println(key);
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		// paint x and y values
 		if(arg0.getButton() == MouseEvent.BUTTON1){
 			x = arg0.getX();
 			y = arg0.getY();
 		}
-		if(arg0.getButton() == MouseEvent.BUTTON3){
-			//x2 = arg0.getX();
-			//y2 = arg0.getY();
-		}
-		
-		
 		s = "x: " + x + "y" + y;
 		repaint();
 		
