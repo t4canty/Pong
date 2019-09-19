@@ -1,0 +1,195 @@
+import java.applet.Applet;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class Driver extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
+	//size of jframe
+	int table_width 	= 900;
+	int table_height 	= 800;
+	int max = 30;
+	
+	int radi[]= new int[max];
+	int x[]= new int[max];
+	int y[]= new int[max];
+	int y2;
+	int x2;
+	int f = 0;
+	int radius = 50;
+	int xvelocity = 0;
+	int yvelocity = 0;
+	Color[] colors = new Color[255];
+	
+
+	
+	// reading a val from a 1d array
+	// System.out.print( x[0]); //reading value
+	// x[0] = 5; //writing is similar to regular variables but now you have to specify WHERE
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.RED);
+		g.fillOval(x2 - radius/2, y2 - radius/2, radius, radius);
+		g.setColor(Color.BLACK);
+		for(int i = 0; i < max -1; i++){
+			g.setColor(colors[i]);
+			g.fillOval(x[i], y[i], radi[i], radi[i]);
+		}
+		
+		
+	}//end of paint method - put code above for anything dealing with drawing -
+	
+	
+	
+	Font font = new Font ("Courier New", 1, 50);
+	public void update() {
+		x[f] += xvelocity;
+		y[f] += yvelocity;
+		Point p = MouseInfo.getPointerInfo().getLocation();
+		x2 = p.x;
+		y2 = p.y;
+		if((y[f] - radi[f] >= y2 - radius && y[f] + radi[f] <= y2 + radius) && (x[f] - radi[f] >= x2 - radius/2 && x[f] - radi[f]  <= x2 + radius/2 )){
+			radius += radi[f];
+			radi[f] = 0;
+		}
+		if(y[f] <= 0 ){
+			y[f] = table_height;
+		}
+		if(x[f] <= 0 ){
+			x[f] = table_width;
+		}
+		if(y[f] >= table_height ){
+			y[f] = 0;
+		}
+		if(x[f] >= table_width ){
+			x[f] = 0;
+		}
+	
+		System.out.println(""+f);
+		if(f == max -1){
+			f = 0;
+		}
+		yvelocity = (int) (Math.random()*(10) - 10);
+		xvelocity = (int) (Math.random()*(10) - 10);
+		f++;
+		
+		
+		
+	}//end of update method - put code above for any updates on variable
+		
+	
+	//==================code above ===========================
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		update();
+		repaint();
+	}
+	
+	public static void main(String[] arg) {
+		Driver d = new Driver();
+	}
+	public Driver(){
+		JFrame f = new JFrame();
+		f.setTitle("Arrays");
+		f.setSize(table_width, table_height);
+		f.setBackground(Color.BLACK);
+		f.setResizable(false);
+		f.addKeyListener(this);
+		f.addMouseMotionListener(this);
+		
+		
+		
+		for(int i =0; i<max-1; i++){
+			radi[i] = (int) (Math.random()*(70)+20);
+			x[i] = (int) (Math.random()*(table_width)+5);
+			y[i] = (int) (Math.random()*(table_height)+5);
+			colors[i] = new Color((int) (Math.random()*(255)), (int) (Math.random()*(255)), (int) (Math.random()*(255)));
+		}
+
+
+		f.add(this);
+		
+		
+		t = new Timer(17,this);
+		t.start();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+	}
+	Timer t;
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.getX());
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+ 
+
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
