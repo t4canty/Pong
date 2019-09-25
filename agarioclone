@@ -1,4 +1,3 @@
-import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,24 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Vector;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Driver extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
+public class Driver extends JPanel implements ActionListener, KeyListener{
 	//size of jframe
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	boolean mouse = true;
 	
 	int table_width = screenSize.width;
 	int table_height = screenSize.height; 	
-	int max = 50;
+	int max = 20;
 	int radmax = 500;
 	
 	int radi[]= new int[max];
@@ -36,7 +30,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 	int y[]= new int[max];
 	int y2 = table_height/2;
 	int x2 = table_width/2;
-	int radius = 5;
+	int radius = 100; //(int) (Math.random()*(30)+5);
 	int xvelocity = 0;
 	int yvelocity = 0;
 	int invincibility = 0;
@@ -120,25 +114,35 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 				xvelocity = 0;
 				yvelocity = 0;
 				if(x[f] < x2){
-					x[f] += 50/(radi[f]/10);
+					xvelocity += 50/(1+radi[f]/10);
 				}else if(x[f] > x2){
-					x[f] -= 50/(radi[f]/10);
+					xvelocity -= 50/(1+radi[f]/10);
 				}
 				if(y[f] < y2){
-					y[f] += 50/(radi[f]/10);
+					yvelocity += 50/(1+radi[f]/10);
 				}if(y[f] > y2){
-					y[f] -= 50/(radi[f]/10);
+					yvelocity -= 50/(1+radi[f]/10);
 				}
 				
 			}
 			else if(radi[f] < radius && x[f] > x2 - radius - 100 && x[f] < x2 + 100 + radius && y[f] > y2 - 100 - radius && y[f] < y2 + 100 + radius){
 				colors[f] = Color.RED;
-				xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[f]/10);
-				yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[f]/10);
+				//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[f]/10);
+				//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[f]/10);
+				if(x[f] > x2){
+					xvelocity += 50/(1+radi[f]/10);
+				}else if(x[f] < x2){
+					xvelocity -= 50/(1+radi[f]/10);
+				}
+				if(y[f] > y2){
+					yvelocity += 50/(1+radi[f]/10);
+				}if(y[f] < y2){
+					yvelocity -= 50/(1+radi[f]/10);
+				}
 			}else{
 				colors[f] = oldColors[f];
-				yvelocity = (int) (Math.random()*(100) - 40)/(1+radi[f]/10);
-				xvelocity = (int) (Math.random()*(100) - 40)/(1+radi[f]/10);
+				yvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
+				xvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
 			}
 			x[f] += xvelocity;
 			y[f] += yvelocity;
@@ -150,8 +154,9 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 		super.paintComponent(g);
 		g.setColor(Color.RED);
 		g.drawString(""+ radius, table_width - 100, 100);
-		g.fillOval(x2 - radius/2, y2 - radius/2, radius, radius);
+		g.drawString("" + invincibility, table_width - 200, 100);
 		g.setColor(Color.BLACK);
+		g.fillOval(x2 - radius/2, y2 - radius/2, radius, radius);
 		player = new Rectangle(x2, y2, radius, radius);
 		for(int i = 0; i < max -1; i++){
 			g.setColor(colors[i]);
@@ -177,21 +182,25 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 		}
 		
 		Point p = MouseInfo.getPointerInfo().getLocation();
-		
-		sx = p.x;
-		sy = p.y;		
-		
-		xdistance = p.x - x2;
-		ydistance = p.y - y2;
-		xplayerv = ((xdistance/2)/(1+radius/10));
-		yplayerv = ((ydistance/2)/(1+radius/10));
-		if(xplayerv > 100){
-			x2 += maxVelocity;
+		if(mouse == true){	
+			sx = p.x;
+			sy = p.y;		
+			
+			xdistance = p.x - x2;
+			ydistance = p.y - y2;
+			xplayerv = ((xdistance/2)/(1+radius/10));
+			yplayerv = ((ydistance/2)/(1+radius/10));
+			if(xplayerv > 100){
+				x2 += maxVelocity;
+			}else{
+				x2 += xplayerv;
+			}if(yplayerv > 100){
+				y2 += maxVelocity;
+			}else{
+				y2 += yplayerv;
+			}
 		}else{
 			x2 += xplayerv;
-		}if(yplayerv > 100){
-			y2 += maxVelocity;
-		}else{
 			y2 += yplayerv;
 		}
 
@@ -221,7 +230,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 		f.setBackground(Color.BLACK);
 		f.setResizable(false);
 		f.addKeyListener(this);
-		f.addMouseMotionListener(this);
 		f.add(this);
 		
 		randomGen();
@@ -235,61 +243,87 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		System.out.println("key:" + key);
+		switch(key){
+		case 32:
+			radius /= 2;
+			break;
+		case 88:
+			mouse = false;
+			break;
+		case 69:
+			mouse = true;
+			break;
+		case 82:
+			randomGen();
+		}
 		
+		if(mouse == false){
+			switch(key){
+			case 38:
+				yplayerv += -((70/2)/(1+radius/10));
+				break;
+			case 40:
+				yplayerv += ((70/2)/(1+radius/10));
+				break;
+			case 37:
+				xplayerv += -((70/2)/(1+radius/10));
+				break;
+			case 39:
+				xplayerv += ((70/2)/(1+radius/10));
+				break;
+			case 87:
+				yplayerv += -((70/2)/(1+radius/10));
+				break;
+			case 83:
+				yplayerv += ((70/2)/(1+radius/10));
+				break;
+			case 65:
+				xplayerv += -((70/2)/(1+radius/10));
+				break;
+			case 68:
+				xplayerv += ((70/2)/(1+radius/10));	
+			}
+		}
+		//randomGen();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		int key = e.getKeyCode();
+		System.out.println("key:" + key);
+		switch(key){
+		case 38:
+			yplayerv = 0;
+			break;
+		case 40:
+			yplayerv = 0;
+			break;
+		case 37:
+			xplayerv = 0;
+			break;
+		case 39:
+			xplayerv = 0;
+			break;
+		case 87:
+			yplayerv = 0;
+			break;
+		case 83:
+			yplayerv = 0;
+			break;
+		case 65:
+			xplayerv = 0;
+			break;
+		case 68:
+			xplayerv = 0;	
+		}
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-			randomGen();
+			
 		
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println(e.getX());
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
- 
-
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
