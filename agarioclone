@@ -30,7 +30,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	int y[]= new int[max];
 	int y2 = table_height/2;
 	int x2 = table_width/2;
-	int radius = 100; //(int) (Math.random()*(30)+5);
+	int radius = 400;//(int) (Math.random()*(30)+5);
 	int xvelocity = 0;
 	int yvelocity = 0;
 	int invincibility = 0;
@@ -45,7 +45,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	
 	Color[] oldColors = new Color[255];
 	Color[] colors = new Color[255];
-	Rectangle2D[] rectangles = new Rectangle2D[max];
+	Rectangle[] rectangles = new Rectangle[max];
 	Rectangle player = new Rectangle(radius, radius, x2, y2);
 	String str = "";
 
@@ -63,10 +63,48 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 				radi[i] = (int) (Math.random()*(70+ radius/2)+10 + radius/4);
 			x[i] = (int) (Math.random()*(table_width)+5);
 			y[i] = (int) (Math.random()*(table_height)+5);
+			rectangles[i] = new Rectangle(x[i], y[i], radi[i], radi[i]);
 			colors[i] = new Color((int) (Math.random()*(255)), (int) (Math.random()*(255)), (int) (Math.random()*(255)));
 			oldColors[i] = colors[i]; 
 		}
 	}
+	public void EnemyCollide(){
+		for(int f = 1; f < max-1; f++){
+			if(rectangles[f].intersects(x[f+1], y[f+1], radi[f+1], radi[f+1])){
+				if(radi[f+1] > radi[f]){
+					radi[f] = 0;
+					radi[f+1] += radi[f];
+				}
+				else{
+					radi[f] += radi[f+1];
+					radi[f-1] = 0;
+				}
+			}else if( rectangles[f].intersects(x[f-1], y[f-1], radi[f-1], radi[f-1])){
+				if(radi[f-1] > radi[f]){
+					radi[f] = 0;
+					radi[f-1] += radi[f];
+				}
+				else if(radi[f-1] < radi[f]){
+					radi[f] += radi[f+1];
+					radi[f-1] = 0;
+				}
+			}
+			
+			if(y[f] <= 0 ){
+				y[f] = table_height;
+			}
+			if(x[f] <= 0 ){
+				x[f] = table_width;
+			}
+			if(y[f] >= table_height ){
+				y[f] = 0;
+			}
+			if(x[f] >= table_width ){
+				x[f] = 0;
+			}
+		}
+	}
+	
 	
 	public void collision() {
 		invincibility++;
@@ -83,18 +121,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 					radi[f] = 0;
 				}
 			}
-			if(y[f] <= 0 ){
-				y[f] = table_height;
-			}
-			if(x[f] <= 0 ){
-				x[f] = table_width;
-			}
-			if(y[f] >= table_height ){
-				y[f] = 0;
-			}
-			if(x[f] >= table_width ){
-				x[f] = 0;
-			}
+		
 			if(x2 > table_width)
 				x2 = table_width;
 			if(x2 < 0 )
@@ -103,6 +130,67 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 				y2 = table_height - 50;
 			if(y2 < 0)
 				y2 = 0;
+		}
+	}
+	
+	public void chaseOthers(){
+		for(int f=1; f < max-1; f++){
+			if(radi[f] > radi[f+1] && x[f] > x[f+1] - radi[f+1] - 100 - radi[f] && x[f] < x[f+1] + 100 + radi[f+1] + radi[f] && y[f] > y[f+1] - 100 - radi[f+1] - radi[f] && y[f] < y[f+1] + 100 + radi[f+1] + radi[f] || radi[f] > radi[f-1] && x[f] > x[f-1] - radi[f-1] - 100 - radi[f] && x[f] < x[f-1] + 100 + radi[f-1] + radi[f] && y[f] > y[f-1] - 100 - radi[f-1] - radi[f] && y[f] < y[f-1] + 100 + radi[f-1] + radi[f]){
+				colors[f] = Color.GREEN;
+				xvelocity = 0;
+				yvelocity = 0;
+				if(x[f] < x[f+1]){
+					xvelocity += 50/(1+radi[f]/10);
+				}if(x[f] > x[f+1]){
+					xvelocity -= 50/(1+radi[f]/10);
+				}
+				if(y[f] < y[f+1]){
+					yvelocity += 50/(1+radi[f]/10);
+				}if(y[f] > y[f+1]){
+					yvelocity -= 50/(1+radi[f]/10);
+				}
+				if(x[f] < x[f-1]){
+					xvelocity += 50/(1+radi[f]/10);
+				}if(x[f] > x[f-1]){
+					xvelocity -= 50/(1+radi[f]/10);
+				}
+				if(y[f] < y[f-1]){
+					yvelocity += 50/(1+radi[f]/10);
+				}if(y[f] > y[f-1]){
+					yvelocity -= 50/(1+radi[f]/10);
+				}
+				
+			}
+			else if(radi[f] < radi[f+1] && x[f] > x[f+1] - radi[f+1] - 100 - radi[f] && x[f] < x[f+1] + 100 + radi[f+1] + radi[f] && y[f] > y[f+1] - 100 - radi[f+1] - radi[f] && y[f] < y[f+1] + 100 + radi[f+1] + radi[f] || radi[f] < radi[f-1] && x[f] > x[f-1] - radi[f-1] - 100 - radi[f] && x[f] < x[f-1] + 100 + radi[f-1] + radi[f] && y[f] > y[f-1] - 100 - radi[f-1] - radi[f] && y[f] < y[f-1] + 100 + radi[f-1] + radi[f]){
+				colors[f] = Color.RED;
+				//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[f]/10);
+				//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[f]/10);
+				if(x[f] > x[f+1]){
+					xvelocity += 50/(1+radi[f]/10);
+				}if(x[f] < x[f+1]){
+					xvelocity -= 50/(1+radi[f]/10);
+				}
+				if(y[f] > y[f+1]){
+					yvelocity += 50/(1+radi[f]/10);
+				}if(y[f] < y[f+1]){
+					yvelocity -= 50/(1+radi[f]/10);
+				}if(x[f] > x[f-1]){
+					xvelocity += 50/(1+radi[f]/10);
+				}if(x[f] < x[f-1]){
+					xvelocity -= 50/(1+radi[f]/10);
+				}
+				if(y[f] > y[f-1]){
+					yvelocity += 50/(1+radi[f]/10);
+				}if(y[f] < y[f-1]){
+					yvelocity -= 50/(1+radi[f]/10);
+				}
+			}else{
+				colors[f] = oldColors[f];
+				yvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
+				xvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
+			}
+			x[f] += xvelocity;
+			y[f] += yvelocity;
 		}
 	}
 	
@@ -176,7 +264,10 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 
 
 		chasePlayer();
+		chaseOthers();
+		EnemyCollide();
 		collision();
+		
 		if(radius > radmax){
 			radius = radmax;
 		}
@@ -256,6 +347,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 			mouse = true;
 			break;
 		case 82:
+			invincibility = 0;
 			randomGen();
 		}
 		
