@@ -30,7 +30,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	int y[]= new int[max];
 	int y2 = table_height/2;
 	int x2 = table_width/2;
-	int radius = 400;//(int) (Math.random()*(30)+5);
+	int radius = (int) (Math.random()*(30)+5);
 	int xvelocity = 0;
 	int yvelocity = 0;
 	int invincibility = 0;
@@ -53,6 +53,24 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	// reading a val from a 1d array
 	// System.out.print( x[0]); //reading value
 	// x[0] = 5; //writing is similar to regular variables but now you have to specify WHERE
+	public void eatOthers(){
+		for(int i = 0; i < max -1; i++){
+			for(int f = 0; f < max-1; f++){
+				if(rectangles[i].intersects(x[f], y[f], radi[f], radi[f]) && f != i){
+					if(radi[i] > radi[f]){
+						radi[f] = 0;
+						radi[i] += radi[f];
+					}
+					else{
+						radi[f] += radi[i];
+						radi[i] = 0;
+					}
+				}
+			}
+		}
+	}
+	
+	
 	public void randomGen(){
 		for(int i =0; i<max-1; i++){
 			if(radius == radmax)
@@ -69,26 +87,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 	public void EnemyCollide(){
-		for(int f = 1; f < max-1; f++){
-			if(rectangles[f].intersects(x[f+1], y[f+1], radi[f+1], radi[f+1])){
-				if(radi[f+1] > radi[f]){
-					radi[f] = 0;
-					radi[f+1] += radi[f];
-				}
-				else{
-					radi[f] += radi[f+1];
-					radi[f-1] = 0;
-				}
-			}else if( rectangles[f].intersects(x[f-1], y[f-1], radi[f-1], radi[f-1])){
-				if(radi[f-1] > radi[f]){
-					radi[f] = 0;
-					radi[f-1] += radi[f];
-				}
-				else if(radi[f-1] < radi[f]){
-					radi[f] += radi[f+1];
-					radi[f-1] = 0;
-				}
-			}
+		for(int f = 0; f<max-1; f++){
 			
 			if(y[f] <= 0 ){
 				y[f] = table_height;
@@ -134,63 +133,65 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	public void chaseOthers(){
-		for(int f=1; f < max-1; f++){
-			if(radi[f] > radi[f+1] && x[f] > x[f+1] - radi[f+1] - 100 - radi[f] && x[f] < x[f+1] + 100 + radi[f+1] + radi[f] && y[f] > y[f+1] - 100 - radi[f+1] - radi[f] && y[f] < y[f+1] + 100 + radi[f+1] + radi[f] || radi[f] > radi[f-1] && x[f] > x[f-1] - radi[f-1] - 100 - radi[f] && x[f] < x[f-1] + 100 + radi[f-1] + radi[f] && y[f] > y[f-1] - 100 - radi[f-1] - radi[f] && y[f] < y[f-1] + 100 + radi[f-1] + radi[f]){
-				colors[f] = Color.GREEN;
-				xvelocity = 0;
-				yvelocity = 0;
-				if(x[f] < x[f+1]){
-					xvelocity += 50/(1+radi[f]/10);
-				}if(x[f] > x[f+1]){
-					xvelocity -= 50/(1+radi[f]/10);
+		for(int i = 0; i < max-1; i++){
+			for(int f=0; f < max-1; f++){
+				if(radi[i] > radi[f] && x[i] > x[f] - radi[f] - 100 - radi[i] && x[i] < x[f] + 100 + radi[f] + radi[i] && y[i] > y[f] - 100 - radi[f] - radi[i] && y[i] < y[f] + 100 + radi[f] + radi[i] && i != f){
+					colors[i] = Color.GREEN;
+					xvelocity = 0;
+					yvelocity = 0;
+					if(x[i] < x[f]){
+						xvelocity += 15/(1+radi[i]/4);
+					}if(x[i] > x[f]){
+						xvelocity -= 15/(1+radi[i]/4);
+					}
+					if(y[i] < y[f]){
+						yvelocity += 15/(1+radi[i]/4);
+					}if(y[i] > y[f]){
+						yvelocity -= 15/(1+radi[i]/4);
+					}
+					if(x[i] < x[f]){
+						xvelocity += 15/(1+radi[i]/4);
+					}if(x[i] > x[f]){
+						xvelocity -= 15/(1+radi[i]/4);
+					}
+					if(y[i] < y[f]){
+						yvelocity += 15/(1+radi[i]/4);
+					}if(y[i] > y[f]){
+						yvelocity -= 15/(1+radi[i]/4);
+					}
+					
 				}
-				if(y[f] < y[f+1]){
-					yvelocity += 50/(1+radi[f]/10);
-				}if(y[f] > y[f+1]){
-					yvelocity -= 50/(1+radi[f]/10);
+				else if(radi[i] < radi[f] && x[i] > x[f] - radi[f] - 100 - radi[i] && x[i] < x[f] + 100 + radi[f] + radi[i] && y[i] > y[f] - 100 - radi[f] - radi[i] && y[i] < y[f] + 100 + radi[f] + radi[i] && i != f){
+					colors[i] = Color.RED;
+					//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[i]/4);
+					//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[i]/4);
+					if(x[i] > x[f]){
+						xvelocity += 15/(1+radi[i]/4);
+					}if(x[i] < x[f]){
+						xvelocity -= 15/(1+radi[i]/4);
+					}
+					if(y[i] > y[f]){
+						yvelocity += 15/(1+radi[i]/4);
+					}if(y[i] < y[f]){
+						yvelocity -= 15/(1+radi[i]/4);
+					}if(x[i] > x[f]){
+						xvelocity += 15/(1+radi[i]/4);
+					}if(x[i] < x[f]){
+						xvelocity -= 15/(1+radi[i]/4);
+					}
+					if(y[i] > y[f]){
+						yvelocity += 15/(1+radi[i]/4);
+					}if(y[i] < y[f]){
+						yvelocity -= 15/(1+radi[i]/4);
+					}
+				}else{
+					colors[i] = oldColors[i];
+					yvelocity = (int) (Math.random()*(25) - 10)/(1+radi[i]/10);
+					xvelocity = (int) (Math.random()*(25) - 10)/(1+radi[i]/10);
 				}
-				if(x[f] < x[f-1]){
-					xvelocity += 50/(1+radi[f]/10);
-				}if(x[f] > x[f-1]){
-					xvelocity -= 50/(1+radi[f]/10);
-				}
-				if(y[f] < y[f-1]){
-					yvelocity += 50/(1+radi[f]/10);
-				}if(y[f] > y[f-1]){
-					yvelocity -= 50/(1+radi[f]/10);
-				}
-				
+				x[i] += xvelocity;
+				y[i] += yvelocity;
 			}
-			else if(radi[f] < radi[f+1] && x[f] > x[f+1] - radi[f+1] - 100 - radi[f] && x[f] < x[f+1] + 100 + radi[f+1] + radi[f] && y[f] > y[f+1] - 100 - radi[f+1] - radi[f] && y[f] < y[f+1] + 100 + radi[f+1] + radi[f] || radi[f] < radi[f-1] && x[f] > x[f-1] - radi[f-1] - 100 - radi[f] && x[f] < x[f-1] + 100 + radi[f-1] + radi[f] && y[f] > y[f-1] - 100 - radi[f-1] - radi[f] && y[f] < y[f-1] + 100 + radi[f-1] + radi[f]){
-				colors[f] = Color.RED;
-				//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[f]/10);
-				//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[f]/10);
-				if(x[f] > x[f+1]){
-					xvelocity += 50/(1+radi[f]/10);
-				}if(x[f] < x[f+1]){
-					xvelocity -= 50/(1+radi[f]/10);
-				}
-				if(y[f] > y[f+1]){
-					yvelocity += 50/(1+radi[f]/10);
-				}if(y[f] < y[f+1]){
-					yvelocity -= 50/(1+radi[f]/10);
-				}if(x[f] > x[f-1]){
-					xvelocity += 50/(1+radi[f]/10);
-				}if(x[f] < x[f-1]){
-					xvelocity -= 50/(1+radi[f]/10);
-				}
-				if(y[f] > y[f-1]){
-					yvelocity += 50/(1+radi[f]/10);
-				}if(y[f] < y[f-1]){
-					yvelocity -= 50/(1+radi[f]/10);
-				}
-			}else{
-				colors[f] = oldColors[f];
-				yvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
-				xvelocity = (int) (Math.random()*(70) - 10)/(1+radi[f]/10);
-			}
-			x[f] += xvelocity;
-			y[f] += yvelocity;
 		}
 	}
 	
@@ -265,6 +266,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 
 		chasePlayer();
 		chaseOthers();
+		eatOthers();
 		EnemyCollide();
 		collision();
 		
@@ -415,7 +417,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-			
-		
+
 	}
 }
