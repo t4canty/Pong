@@ -10,10 +10,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+/*
+ * Put Comment here
+ * its not agar.io btw
+ * The game si very challenging and fun
+ * 
+ * game is different, but fun and fast paced
+ * hard to tell whats food or not
+ * 
+ * I like how unique the game is. I also like the difficulty level but it is difficult
+ * to tell what are the enemies and what are the food. Maybe make enemies one color and food another?
+ * 
+ * the game is very cahllenging and has a good concept
+ * it's hard to tell which one is the player and the enemies and food could move a little smoother
+ * 
+ * HUGE FLEX -> THIS IS REALLY GOOD -> GOOD JOB
+ * 
+ * Controls are :
+ * R - regens enemies if the timer is greater than 100
+ * x- disables mouse
+ * e- enables mouse
+ * space - halves radius or new game if game over
+ */
+
 
 public class Driver extends JPanel implements ActionListener, KeyListener{
 	//size of jframe
@@ -23,7 +45,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	int table_width = screenSize.width;
 	int table_height = screenSize.height; 	
 	int max = 20;
-	int radmax = 500;
+	int radmax = 700;
 	
 	int radi[]= new int[max];
 	int x[]= new int[max];
@@ -136,7 +158,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 		for(int i = 0; i < max-1; i++){
 			for(int f=0; f < max-1; f++){
 				if(radi[i] > radi[f] && x[i] > x[f] - radi[f] - 100 - radi[i] && x[i] < x[f] + 100 + radi[f] + radi[i] && y[i] > y[f] - 100 - radi[f] - radi[i] && y[i] < y[f] + 100 + radi[f] + radi[i] && i != f){
-					colors[i] = Color.GREEN;
+					//colors[i] = Color.GREEN;
 					xvelocity = 0;
 					yvelocity = 0;
 					if(x[i] < x[f]){
@@ -162,7 +184,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 					
 				}
 				else if(radi[i] < radi[f] && x[i] > x[f] - radi[f] - 100 - radi[i] && x[i] < x[f] + 100 + radi[f] + radi[i] && y[i] > y[f] - 100 - radi[f] - radi[i] && y[i] < y[f] + 100 + radi[f] + radi[i] && i != f){
-					colors[i] = Color.RED;
+					//colors[i] = Color.RED;
 					//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[i]/4);
 					//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[i]/4);
 					if(x[i] > x[f]){
@@ -199,7 +221,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 		for(int f=0; f < max-1; f++) {
 		
 			if(radi[f] > radius && x[f] > x2 - radius - 100 - radi[f] && x[f] < x2 + 100 + radius + radi[f] && y[f] > y2 - 100 - radius - radi[f] && y[f] < y2 + 100 + radius + radi[f]){
-				colors[f] = Color.GREEN;
+				//colors[f] = Color.GREEN;
 				xvelocity = 0;
 				yvelocity = 0;
 				if(x[f] < x2){
@@ -215,7 +237,7 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 				
 			}
 			else if(radi[f] < radius && x[f] > x2 - radius - 100 && x[f] < x2 + 100 + radius && y[f] > y2 - 100 - radius && y[f] < y2 + 100 + radius){
-				colors[f] = Color.RED;
+				//colors[f] = Color.RED;
 				//xvelocity = (int) -xplayerv + (100*Integer.signum((int) xplayerv))/(1+radi[f]/10);
 				//yvelocity = (int) -yplayerv + (100*Integer.signum((int) yplayerv))/(1+radi[f]/10);
 				if(x[f] > x2){
@@ -262,13 +284,25 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 	
 	Font font = new Font ("Courier New", 1, 50);
 	public void update() {
-
+		/*if(radius >= 500){
+			try{
+				for(int i = 0; i<max-1; i++){
+					radi[i] /= 2;
+				}
+				radius /= 2;
+			}
+			catch(Exception e){
+				System.out.println(e.printstacktrace)
+			}
+		}
+		*/
 
 		chasePlayer();
+		collision();
 		chaseOthers();
 		eatOthers();
 		EnemyCollide();
-		collision();
+		
 		
 		if(radius > radmax){
 			radius = radmax;
@@ -340,8 +374,18 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 		System.out.println("key:" + key);
 		switch(key){
 		case 32:
-			radius /= 2;
-			break;
+			if(radius != 0){
+				radius /= 2;
+				break;
+			}else{
+				randomGen();
+				str = "";
+				radius = (int) (Math.random()*(30)+5);
+				x2 = table_width/2;
+				y2 = table_height/2;
+				invincibility = 0;
+				break;
+			}
 		case 88:
 			mouse = false;
 			break;
@@ -349,8 +393,10 @@ public class Driver extends JPanel implements ActionListener, KeyListener{
 			mouse = true;
 			break;
 		case 82:
-			invincibility = 0;
-			randomGen();
+			if(invincibility >= 100){
+				invincibility = 0;
+				randomGen();
+			}
 		}
 		
 		if(mouse == false){
